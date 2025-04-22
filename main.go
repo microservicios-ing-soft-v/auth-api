@@ -33,12 +33,12 @@ func main() {
 	}
 
 	userService := UserService{
-		Client:         http.DefaultClient,
+		Client:         http.DefaultClient,
 		UserAPIAddress: userAPIAddress,
 		AllowedUserHashes: map[string]interface{}{
 			"admin_admin": nil,
-			"johnd_foo":   nil,
-			"janed_ddd":   nil,
+			"johnd_foo":   nil,
+			"janed_ddd":   nil,
 		},
 	}
 
@@ -68,6 +68,12 @@ func main() {
 	})
 
 	e.POST("/login", getLoginHandler(userService))
+
+	// Health check endpoint utilizando Echo
+	e.GET("/health", func(c echo.Context) error {
+		response := map[string]string{"status": "UP"}
+		return c.JSON(http.StatusOK, response)
+	})
 
 	// Start server
 	e.Logger.Fatal(e.Start(hostport))
